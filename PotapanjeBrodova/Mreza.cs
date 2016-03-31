@@ -7,43 +7,30 @@ namespace PotapanjeBrodova
 {
     public class Mreza
     {
-        public Polje[,] polja;
-        private int brojRedaka;
-        private int brojStupaca;
+        public List<Polje> polja = new List<Polje>();
+        public int BrojRedaka { get;}
+        public int BrojStupaca { get;}
 
         public Mreza(int redak, int stupac) {
-            brojRedaka = redak;
-            brojStupaca = stupac;
-            this.polja = new Polje[redak, stupac];
+            BrojRedaka = redak;
+            BrojStupaca = stupac;
             for (int r = 0; r < redak; r++)
             {
                 for (int s = 0; s < stupac; s++)
                 {
-                    this.polja[r,s] = new Polje(r, s);
+                    polja.Add(new Polje(r, s));
                 }
             }
         }
 
 
-        public List<Polje> DajSlobodnaPolja() {
-            List<Polje> lista = new List<Polje>();
-            for (int r = 0; r < brojRedaka; r++)
-            {
-                for (int s = 0; s < brojStupaca; s++)
-                {
-                    if (polja[r,s] != null) lista.Add(polja[r,s]);
-                }
-            }
-            //foreach (Polje p in this.polja)
-            //{
-            //    if (p!=null) lista.Add(p);
-            //}
-            return lista;
+        public IEnumerable<Polje> DajSlobodnaPolja() {
+            return polja;
         }
 
 
-        public void EliminirajPolje(int redak, int stupac) {
-            this.polja[redak, stupac] = null;
+        public void EliminirajPolje(Polje p) {
+            this.polja.Remove(p);
         }
 
 

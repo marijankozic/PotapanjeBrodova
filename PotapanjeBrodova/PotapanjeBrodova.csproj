@@ -39,6 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Brod.cs" />
+    <Compile Include="Brodograditelj.cs" />
+    <Compile Include="Flota.cs" />
     <Compile Include="Mreza.cs" />
     <Compile Include="Polje.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using PotapanjeBrodova;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace UnitTests
 {
@@ -10,36 +11,42 @@ namespace UnitTests
         [TestMethod]
         public void Mreza_DajSlobodnaPoljaInicijalnoDajeSvaPoljaUMrezi() {
             Mreza m = new Mreza(10, 10);
-            Assert.AreEqual(100, m.DajSlobodnaPolja().Count);
+            Assert.AreEqual(100, m.DajSlobodnaPolja().Count());
         }
 
         [TestMethod]
         public void Mreza_DajSlobodnaPoljaNakonEliminiranjaJednogPoljaIspravnoVracaOstatak() {
             Mreza m = new Mreza(10, 10);
-            m.EliminirajPolje(1, 1);
-            Assert.AreEqual(99, m.DajSlobodnaPolja().Count);
-            Assert.IsFalse(m.DajSlobodnaPolja().Exists(polje => polje.Redak == 1 && polje.Stupac == 1));
+            m.EliminirajPolje(new Polje(1,1));
+            Assert.AreEqual(99, m.DajSlobodnaPolja().Count());
+            Assert.IsFalse(m.DajSlobodnaPolja().Contains(new Polje(1, 1)));
         }
 
         [TestMethod]
         public void Mreza_DajSlobodnaPoljaNakonEliminiranjaDvaPoljaIspravnoVracaOstatak() {
             Mreza m = new Mreza(10, 10);
-            m.EliminirajPolje(1, 1);
-            m.EliminirajPolje(2, 2);
-            Assert.AreEqual(98, m.DajSlobodnaPolja().Count);
-            Assert.IsFalse(m.DajSlobodnaPolja().Exists(polje => polje.Redak == 1 && polje.Stupac == 1));
-            Assert.IsFalse(m.DajSlobodnaPolja().Exists(polje => polje.Redak == 2 && polje.Stupac == 2));
-
+            m.EliminirajPolje(new Polje(1, 1));
+            m.EliminirajPolje(new Polje(2, 2));
+            Assert.AreEqual(98, m.DajSlobodnaPolja().Count());
+            Assert.IsFalse(m.DajSlobodnaPolja().Contains(new Polje(1, 1)));
+            Assert.IsFalse(m.DajSlobodnaPolja().Contains(new Polje(2, 2)));
         }
 
         [TestMethod]
         public void Mreza_DajSlobodnaPoljaNakonDuplogEliminiranjaIstogPoljaIspravnoVracaOstatak() {
             Mreza m = new Mreza(10, 10);
-            m.EliminirajPolje(1, 1);
-            m.EliminirajPolje(1, 1);
-            Assert.AreEqual(99, m.DajSlobodnaPolja().Count);
-            Assert.IsFalse(m.DajSlobodnaPolja().Exists(polje => polje.Redak == 1 && polje.Stupac == 1));
+            m.EliminirajPolje(new Polje(1, 1));
+            m.EliminirajPolje(new Polje(1, 1));
+            Assert.AreEqual(99, m.DajSlobodnaPolja().Count());
+            Assert.IsFalse(m.DajSlobodnaPolja().Contains(new Polje(1, 1)));
+        }
 
+        [TestMethod]
+        public void Mreza_DajSlobodnaPoljaNakonEliminiranjaNepostojecegPoljaIspravnoVracaOstatak() {
+            Mreza m = new Mreza(10, 10);
+            m.EliminirajPolje(new Polje(13, 14));
+            m.EliminirajPolje(new Polje(14, 15));
+            Assert.AreEqual(100, m.DajSlobodnaPolja().Count());
         }
 
     }

@@ -58,6 +58,8 @@
     <Compile Include="TestPolja.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestMreze.cs" />
+    <Compile Include="TestBrodograditelja.cs" />
+    <Compile Include="TestFlote.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PotapanjeBrodova\PotapanjeBrodova.csproj">
