@@ -1,15 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace PotapanjeBrodova
 {
     public class Brod
     {
-        public List<Polje> Polja { get;}
+        List<Polje> polja;
+        public List<Polje> Polja { get { return polja; } }
 
         public Brod(List<Polje> polja) {
-            this.Polja = polja;
+            this.polja = polja;
         }
 
-
+        internal rezultatGadjanja ObradiPogodak(Polje p) {
+            if (this.polja.Contains(p)) {
+                this.polja.Remove(p);
+                return this.polja.Count==0 ? rezultatGadjanja.potopljen : rezultatGadjanja.pogodak;
+            }
+            else {
+                return rezultatGadjanja.promasaj;
+            }
+        }
     }
 }
