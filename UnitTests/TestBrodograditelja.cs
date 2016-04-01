@@ -27,10 +27,8 @@ namespace UnitTests
         }
 
 
-        /*
-            Ovaj test se odnosi na verziju metode s predavanja
-        */
-        
+        //
+        //  Ovaj test odnosi se na verziju metode s predavanja
         //[TestMethod]
         //public void Brodograditelj_IzaberiPocetnoPoljeVraca1PoljeIzNiza() {
         //    Mreza m = new Mreza(5, 5);

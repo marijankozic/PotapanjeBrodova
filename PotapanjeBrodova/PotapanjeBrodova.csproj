@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AI.cs" />
     <Compile Include="Brod.cs" />
     <Compile Include="Brodograditelj.cs" />
     <Compile Include="Flota.cs" />
