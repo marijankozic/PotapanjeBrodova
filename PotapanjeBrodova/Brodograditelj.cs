@@ -11,8 +11,7 @@ namespace PotapanjeBrodova
         public Mreza Mreza { get { return mreza; } }
 
 
-        public Brodograditelj() {
-        }
+        public Brodograditelj() {}
 
         public Brodograditelj(int redaka, int stupaca) {
             // Nepotrebni konstruktor samo za potrebe Unit Testinga
