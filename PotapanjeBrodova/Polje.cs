@@ -9,6 +9,7 @@ namespace PotapanjeBrodova
     {
         public readonly int Redak;
         public readonly int Stupac;
+        public int Tezina { get; set; } // potrebno za AI
 
         public Polje(int redak, int stupac) {
             Redak = redak;
