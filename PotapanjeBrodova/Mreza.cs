@@ -33,7 +33,45 @@ namespace PotapanjeBrodova
             this.polja.Remove(p);
         }
 
+        public IEnumerable<Polje> DajVertikalnaSlobodnaPolja(int duljina) {
+            List<Polje> slobodnaPocetna = new List<Polje>();
+            foreach (Polje p in polja) {
+                if (ImaDovoljnoMjestaDolje(p, duljina)) {
+                    slobodnaPocetna.Add(p);
+                }
+            }
+            return slobodnaPocetna;
+        }
 
+        public IEnumerable<Polje> DajHorizontalnaSlobodnaPolja(int duljina) {
+            List<Polje> slobodnaPocetna = new List<Polje>();
+            foreach (Polje p in polja) {
+                if (ImaDovoljnoMjestaDesno(p, duljina)) {
+                    slobodnaPocetna.Add(p);
+                }
+            }
+            return slobodnaPocetna;
+        }
+
+        private bool ImaDovoljnoMjestaDolje( Polje p, int duljina) {
+            Boolean rezultat = true;
+            for (int i = p.Redak; i < p.Redak + duljina; i++) {
+                if (!polja.Contains<Polje>(new Polje(i, p.Stupac))) {
+                    rezultat = false;
+                }
+            }
+            return rezultat;
+        }
+
+        private bool ImaDovoljnoMjestaDesno(Polje p, int duljina) {
+            Boolean rezultat = true;
+            for (int i = p.Stupac; i < p.Stupac + duljina; i++) {
+                if (!polja.Contains<Polje>(new Polje(p.Redak, i))) {
+                    rezultat = false;
+                }
+            }
+            return rezultat;
+        }
 
     }
 }

@@ -13,8 +13,8 @@ namespace UnitTests
         public void Brodograditelj_DajHorizontalnaPocetnaPoljaZaBrodDuljine4Vraca2Polja() {
             List<Polje> polja = new List<Polje>(){new Polje(0,0),new Polje(0,1),
                    new Polje(0,2), new Polje(0,3), new Polje(0,4)};
-            Brodograditelj b = new Brodograditelj();
-            Assert.IsTrue(b.DajHorizontalnaSlobodnaPolja(polja, 4).Count() == 2);
+            Brodograditelj b = new Brodograditelj(1,5);
+            Assert.IsTrue(b.Mreza.DajHorizontalnaSlobodnaPolja(4).Count() == 2);
         }
 
 
@@ -22,8 +22,8 @@ namespace UnitTests
         public void Brodograditelj_DajVertikalnaPocetnaPoljaZaBrodDuljine4Vraca2Polja() {
             List<Polje> polja = new List<Polje>(){new Polje(0,0),new Polje(1,0),
                    new Polje(2,0), new Polje(3,0), new Polje(4,0)};
-            Brodograditelj b = new Brodograditelj();
-            Assert.IsTrue(b.DajVertikalnaSlobodnaPolja(polja, 4).Count() == 2);
+            Brodograditelj b = new Brodograditelj(5,1);
+            Assert.IsTrue(b.Mreza.DajVertikalnaSlobodnaPolja(4).Count() == 2);
         }
 
 

@@ -34,6 +34,9 @@ namespace UnitTests
             Brod b = new Brod(polja);
             Flota f = new Flota();
             f.DodajBrod(b);
+            List<Polje> polja2 = new List<Polje> { new Polje(2, 1), new Polje(2, 2) };
+            Brod b2 = new Brod(polja2);
+            f.DodajBrod(b2);
             rezultatGadjanja rez = f.ObradiPogodak(0, 2);
             rez = f.ObradiPogodak(0, 1);
             Assert.AreEqual(rezultatGadjanja.potopljen, rez);

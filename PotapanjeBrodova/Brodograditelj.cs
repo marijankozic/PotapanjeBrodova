@@ -64,8 +64,8 @@ namespace PotapanjeBrodova
         public Brod SagradiBrod(int duljina) {
             // Brodograditelj ima vlastitu Mrezu --> zna si sam pogledati slobodna polja
             IEnumerable<Polje> slobodnaPolja = this.mreza.DajSlobodnaPolja();
-            IEnumerable<Polje> horizontalnaPolja = DajHorizontalnaSlobodnaPolja(slobodnaPolja, duljina);
-            IEnumerable<Polje> vertikalnaPolja = DajVertikalnaSlobodnaPolja(slobodnaPolja, duljina);
+            IEnumerable<Polje> horizontalnaPolja = this.mreza.DajHorizontalnaSlobodnaPolja(duljina);
+            IEnumerable<Polje> vertikalnaPolja = this.mreza.DajVertikalnaSlobodnaPolja(duljina);
             Random rand = new Random();
             List<Polje> poljaBroda = new List<Polje>();
 
@@ -86,45 +86,7 @@ namespace PotapanjeBrodova
         }
 
 
-        public IEnumerable<Polje> DajVertikalnaSlobodnaPolja(IEnumerable<Polje> slobodnaPolja, int duljina) {
-            List<Polje> slobodnaPocetna = new List<Polje>();
-            foreach (Polje p in slobodnaPolja) {
-                if (ImaDovoljnoMjestaDolje(slobodnaPolja, p, duljina)) {
-                    slobodnaPocetna.Add(p);
-                }
-            }
-            return slobodnaPocetna;
-        }
-
-        public IEnumerable<Polje> DajHorizontalnaSlobodnaPolja(IEnumerable<Polje> slobodnaPolja, int duljina) {
-            List<Polje> slobodnaPocetna = new List<Polje>();
-            foreach (Polje p in slobodnaPolja) {
-                if (ImaDovoljnoMjestaDesno(slobodnaPolja, p, duljina)) {
-                    slobodnaPocetna.Add(p);
-                }
-            }
-            return slobodnaPocetna;
-        }
-
-        private bool ImaDovoljnoMjestaDolje(IEnumerable<Polje> slobodnaPolja, Polje p, int duljina) {
-            Boolean rezultat = true;
-            for (int i = p.Redak; i < p.Redak + duljina; i++) {
-                if (!slobodnaPolja.Contains<Polje>(new Polje(i, p.Stupac))) {
-                    rezultat = false;
-                }
-            }
-            return rezultat;
-        }
-
-        private bool ImaDovoljnoMjestaDesno(IEnumerable<Polje> slobodnaPolja, Polje p, int duljina) {
-            Boolean rezultat = true;
-            for (int i = p.Stupac; i < p.Stupac + duljina; i++) {
-                if (!slobodnaPolja.Contains<Polje>(new Polje(p.Redak, i))) {
-                    rezultat = false;
-                }
-            }
-            return rezultat;
-        }
+        
 
         public void PostaviBrodNaMrezu(Brod b) {
             // ova metoda je javna samo radi Unit testinga. Sve osim SloziFlotu bi trebalo biti privatno
