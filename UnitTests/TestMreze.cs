@@ -49,5 +49,15 @@ namespace UnitTests
             Assert.AreEqual(100, m.DajSlobodnaPolja().Count());
         }
 
+        [TestMethod]
+        public void Mreza_ImaDovoljnoMjestaDoljeDobroRadiSNegativniVrijednostima() {
+            Mreza m = new Mreza(5, 5);
+            Polje p = new Polje(3, 3);
+            Polje x = new Polje(0, -1);
+            Assert.IsTrue(m.ImaDovoljnoMjestaDolje(p, 2));
+            Assert.IsFalse(m.ImaDovoljnoMjestaDolje(p, 3));
+            Assert.IsFalse(m.ImaDovoljnoMjestaDolje(x, 1));
+        }
+
     }
 }

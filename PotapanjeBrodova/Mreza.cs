@@ -33,7 +33,7 @@ namespace PotapanjeBrodova
             this.polja.Remove(p);
         }
 
-        internal IEnumerable<Polje> DajVertikalnaSlobodnaPolja(int duljina) {
+        public IEnumerable<Polje> DajVertikalnaSlobodnaPolja(int duljina) {
             List<Polje> slobodnaPocetna = new List<Polje>();
             foreach (Polje p in polja) {
                 if (ImaDovoljnoMjestaDolje(p, duljina)) {
@@ -43,7 +43,7 @@ namespace PotapanjeBrodova
             return slobodnaPocetna;
         }
 
-        internal IEnumerable<Polje> DajHorizontalnaSlobodnaPolja(int duljina) {
+        public IEnumerable<Polje> DajHorizontalnaSlobodnaPolja(int duljina) {
             List<Polje> slobodnaPocetna = new List<Polje>();
             foreach (Polje p in polja) {
                 if (ImaDovoljnoMjestaDesno(p, duljina)) {
@@ -53,7 +53,7 @@ namespace PotapanjeBrodova
             return slobodnaPocetna;
         }
 
-        internal bool ImaDovoljnoMjestaDolje( Polje p, int duljina) {
+        public bool ImaDovoljnoMjestaDolje( Polje p, int duljina) {
             Boolean rezultat = true;
             for (int i = p.Redak; i < p.Redak + duljina; i++) {
                 if (!polja.Contains<Polje>(new Polje(i, p.Stupac))) {
