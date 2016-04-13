@@ -10,8 +10,7 @@ namespace PotapanjeBrodova
         Mreza mreza;
         public Mreza Mreza { get { return mreza; } }
 
-
-        public Brodograditelj() {}
+        public Brodograditelj() { }
 
         public Brodograditelj(int redaka, int stupaca) {
             // Nepotrebni konstruktor samo za potrebe Unit Testinga
@@ -36,7 +35,6 @@ namespace PotapanjeBrodova
 
             return flota;
         }
-
 
         // Ovo je algoritam koji smo odabrali na predavanjima.
         // Moj problem s tim algoritmom je sto kao rezultat dobijem pocetno polje. Tocka.
@@ -69,49 +67,43 @@ namespace PotapanjeBrodova
             Random rand = new Random();
             List<Polje> poljaBroda = new List<Polje>();
 
-            if (rand.Next(1, 2) == 1) {
-                Polje pocetno = horizontalnaPolja.ElementAt<Polje>(rand.Next(horizontalnaPolja.Count<Polje>()));
-                for (int i = pocetno.Stupac; i < pocetno.Stupac + duljina; i++) {
-                    poljaBroda.Add(new Polje(pocetno.Redak, i));
+            int brojPolja = horizontalnaPolja.Count() + vertikalnaPolja.Count();
+            int izbor = rand.Next(brojPolja);
+
+            if (izbor >= horizontalnaPolja.Count()) {
+                Polje pocetno = vertikalnaPolja.ElementAt(izbor - horizontalnaPolja.Count());
+                for (int i = pocetno.Redak; i < pocetno.Redak + duljina; i++) {
+                    poljaBroda.Add(new Polje(i, pocetno.Stupac));
                 }
             }
             else {
-                Polje pocetno = vertikalnaPolja.ElementAt<Polje>(rand.Next(vertikalnaPolja.Count<Polje>()));
-                for (int i = pocetno.Redak; i < pocetno.Redak + duljina; i++) {
-                    poljaBroda.Add(new Polje(i, pocetno.Stupac));
+                Polje pocetno = horizontalnaPolja.ElementAt(izbor);
+                for (int i = pocetno.Stupac; i < pocetno.Stupac + duljina; i++) {
+                    poljaBroda.Add(new Polje(pocetno.Redak, i));
                 }
             }
 
             return new Brod(poljaBroda);
         }
 
-
-        
-
         public void PostaviBrodNaMrezu(Brod b) {
             // ova metoda je javna samo radi Unit testinga. Sve osim SloziFlotu bi trebalo biti privatno
             // ostale klase nemaju razloga izravno se mijesati u posao brodograditelja
 
-            /* 
-            OVO DOLE NIJE ISTINA. NASA PRAVILA KAZU DA SE SMIJU DIRATI :)
-            
-                // Pravilo kaze da se brodovi ne smiju dirati.
-                // To znaci da iz mreze moramo ukloniti sva polja broda + sva okolna polja.
-                // Izabiremo jednostavnost ispred brzine --> ista polja uklanjamo vise puta
-                // Dodatna pogodnost je sto se Mreza ne buni ako uklanjamo nepostojece polje --> slobodno uklanjamo preko granica mreze
-                foreach (Polje p in b.Polja) {
-                    this.mreza.EliminirajPolje(p);
-                    this.mreza.EliminirajPolje(new Polje(p.Redak,p.Stupac + 1));
-                    this.mreza.EliminirajPolje(new Polje(p.Redak, p.Stupac - 1));
-                    this.mreza.EliminirajPolje(new Polje(p.Redak + 1, p.Stupac));
-                    this.mreza.EliminirajPolje(new Polje(p.Redak - 1, p.Stupac));
-                }*/
+
+            // Pravilo kaze da se brodovi ne smiju dirati.
+            // To znaci da iz mreze moramo ukloniti sva polja broda + sva okolna polja.
+            // Izabiremo jednostavnost ispred brzine --> ista polja uklanjamo vise puta
+            // Dodatna pogodnost je sto se Mreza ne buni ako uklanjamo nepostojece polje --> slobodno uklanjamo preko granica mreze
             foreach (Polje p in b.Polja) {
                 this.mreza.EliminirajPolje(p);
+                this.mreza.EliminirajPolje(new Polje(p.Redak, p.Stupac + 1));
+                this.mreza.EliminirajPolje(new Polje(p.Redak, p.Stupac - 1));
+                this.mreza.EliminirajPolje(new Polje(p.Redak + 1, p.Stupac));
+                this.mreza.EliminirajPolje(new Polje(p.Redak - 1, p.Stupac));
             }
+
         }
-
-
 
     }
 }
