@@ -28,7 +28,6 @@ namespace PotapanjeBrodova
             return polja;
         }
 
-
         public void EliminirajPolje(Polje p) {
             this.polja.Remove(p);
         }

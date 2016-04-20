@@ -12,14 +12,18 @@ namespace PotapanjeBrodova
             this.polja = polja;
         }
 
-        internal rezultatGadjanja ObradiPogodak(Polje p) {
+        public rezultatGadjanja ObradiPogodak(Polje p) {
             if (this.polja.Contains(p)) {
                 this.polja.Remove(p);
                 return this.polja.Count==0 ? rezultatGadjanja.potopljen : rezultatGadjanja.pogodak;
             }
             else {
-                return rezultatGadjanja.promasaj;
+                return rezultatGadjanja.promasaj; 
             }
         }
+
+        
+        
+
     }
 }

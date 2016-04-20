@@ -6,34 +6,33 @@ using System.Threading.Tasks;
 
 namespace PotapanjeBrodova
 {
-    public class AI
-    /*
-    Klasa AI brine se za ucinkovito unistavanje protivnicke flote.
-    Sama vodi racuna o modelu protivnicke mreze, stanju flote, itd.
-    AI je neovisna crna kutija -> izlaze poruke o polju koje se gadja, 
-    ulaze povratne informacije. Sve ostalo je nedostupno izvana.
-    */
+    public abstract class AITemplate : IAI
+    
     {
         Mreza mreza;
+        public Mreza Mreza
+        {get { return mreza; } set {mreza = value; }}
+
+        public List<int> Flota {get{return flota;} set{flota = value;}}
+
         List<int> flota = new List<int>();
         Random rand = new Random();
 
         // preko ovih varijabli pratimo u kojem rezimu rada se trenutno nalazimo
         // i sto cemo slijedece gadjati
-        enum rezimRada { napipavanje, unistavanje };
+        public enum rezimRada { napipavanje, unistavanje };
         rezimRada rezim;
         List<Polje> trenutnaMeta = new List<Polje>();
         Polje slijedecePolje;
-        enum smjer { gore, dolje, lijevo, desno, nepoznato };
+        public enum smjer { gore, dolje, lijevo, desno, nepoznato };
         smjer pronadjeniSmjer = smjer.nepoznato;
         HashSet<smjer> moguciSmjerovi = new HashSet<smjer>();
 
-
-        public AI(int redaka, int stupaca, int[] duljineBrodova) {
-            this.mreza = new Mreza(redaka, stupaca);
-            this.flota = duljineBrodova.ToList();
-            this.flota.Sort();
-            this.flota.Reverse();
+        public void Initialize(int redaka, int stupaca, int[] duljineBrodova) {
+            this.Mreza = new Mreza(redaka, stupaca);
+            this.Flota = duljineBrodova.ToList();
+            this.Flota.Sort();
+            this.Flota.Reverse();
             this.rezim = rezimRada.napipavanje;
         }
 
@@ -56,7 +55,7 @@ namespace PotapanjeBrodova
                 switch (rezultat) {
                     case rezultatGadjanja.promasaj:
                         // obicni promasaj
-                        this.mreza.EliminirajPolje(p);
+                        this.Mreza.EliminirajPolje(p);
                         Izvazi();
                         this.slijedecePolje = SlijedecePoljeNapipavanje();
                         break;
@@ -64,14 +63,15 @@ namespace PotapanjeBrodova
                         // prvi pogodak
                         this.rezim = rezimRada.unistavanje;
                         this.trenutnaMeta.Add(p);
-                        this.mreza.EliminirajPolje(p);
+                        this.Mreza.EliminirajPolje(p);
                         this.slijedecePolje = SlijedecePoljeUnistavanje(p, rezultat);
                         break;
                     case rezultatGadjanja.potopljen:
                         // ovdje dolazimo samo ako slucajno napipamo brod velicine 1
                         this.trenutnaMeta.Add(p);
-                        this.flota.Remove(this.trenutnaMeta.Count);
-                        this.mreza.EliminirajPolje(p);
+                        this.Flota.Remove(this.trenutnaMeta.Count);
+                        EliminirajBrod(trenutnaMeta);
+                        this.trenutnaMeta.Clear();
                         this.slijedecePolje = SlijedecePoljeNapipavanje();
                         break;
                 }
@@ -80,11 +80,11 @@ namespace PotapanjeBrodova
             else {
                 switch (rezultat) {
                     case rezultatGadjanja.promasaj:
-                        this.mreza.EliminirajPolje(p);
+                        this.Mreza.EliminirajPolje(p);
                         this.slijedecePolje = SlijedecePoljeUnistavanje(p, rezultat);
                         break;
                     case rezultatGadjanja.pogodak:
-                        this.mreza.EliminirajPolje(p);
+                        this.Mreza.EliminirajPolje(p);
                         this.trenutnaMeta.Add(p);
                         this.slijedecePolje = SlijedecePoljeUnistavanje(p, rezultat);
                         break;
@@ -93,8 +93,8 @@ namespace PotapanjeBrodova
                         this.moguciSmjerovi.Clear();
                         this.pronadjeniSmjer = smjer.nepoznato;
                         this.trenutnaMeta.Add(p);
-                        this.flota.Remove(this.trenutnaMeta.Count);
-                        this.mreza.EliminirajPolje(p);
+                        this.Flota.Remove(this.trenutnaMeta.Count);
+                        EliminirajBrod(this.trenutnaMeta);
                         this.trenutnaMeta.Clear();
                         this.rezim = rezimRada.napipavanje;
                         this.slijedecePolje = SlijedecePoljeNapipavanje();
@@ -103,42 +103,47 @@ namespace PotapanjeBrodova
             }
         }
 
+        public abstract void EliminirajBrod(List<Polje> brod);
+
         public void Izvazi() {
             // Za svako polje u mrezi mjerimo tezinu --> broj nacina na
             // koji se neki brod moze staviti na polje
 
             // prvo resetiraj sve tezine
-            foreach (Polje p in this.mreza.polja) {
+            foreach (Polje p in this.Mreza.polja) {
                 p.Tezina = 0;
             }
 
-            foreach (Polje p in this.mreza.polja) {
+            foreach (Polje p in this.Mreza.polja) {
                 IzvaziPolje(p);
             }
         }
 
-        public void IzvaziPolje(Polje p) {
-            foreach (int duljina in this.flota) {
-                if (this.mreza.ImaDovoljnoMjestaDesno(p, duljina)) {
+        virtual public void IzvaziPolje(Polje p) {
+            // Ovo se cini dovoljno dobro za sve slucajeve
+            // Ali ako neki AI ima pametniju ideju, slobodno implementira nesto bolje
+
+            foreach (int duljina in this.Flota) {
+                if (this.Mreza.ImaDovoljnoMjestaDesno(p, duljina)) {
                     for (int i = p.Stupac; i < p.Stupac + duljina; i++) {
-                        this.mreza.polja.First(x => x.Redak == p.Redak && x.Stupac == i).Tezina++;
+                        this.Mreza.polja.First(x => x.Redak == p.Redak && x.Stupac == i).Tezina++;
                     }
                 }
-                if (this.mreza.ImaDovoljnoMjestaDolje(p, duljina)) {
+                if (this.Mreza.ImaDovoljnoMjestaDolje(p, duljina)) {
                     for (int i = p.Redak; i < p.Redak + duljina; i++) {
-                        this.mreza.polja.First(x => x.Redak == i && x.Stupac == p.Stupac).Tezina++;
+                        this.Mreza.polja.First(x => x.Redak == i && x.Stupac == p.Stupac).Tezina++;
                     }
                 }
             }
         }
 
-        private Polje SlijedecePoljeNapipavanje() {
-            var najtezi = this.mreza.polja.Max(x => x.Tezina);
-            var najtezaGrupa = this.mreza.polja.FindAll(x => x.Tezina == najtezi);
+        virtual public Polje SlijedecePoljeNapipavanje() {
+            var najtezi = this.Mreza.polja.Max(x => x.Tezina);
+            var najtezaGrupa = this.Mreza.polja.FindAll(x => x.Tezina == najtezi);
             return najtezaGrupa.ElementAt(rand.Next(najtezaGrupa.Count));
         }
 
-        private Polje SlijedecePoljeUnistavanje(Polje prethodnoPolje, rezultatGadjanja rezultat) {
+        protected Polje SlijedecePoljeUnistavanje(Polje prethodnoPolje, rezultatGadjanja rezultat) {
             Polje zadnjiPogodak = this.trenutnaMeta.Last();
             Polje prviPogodak = this.trenutnaMeta.First();
             if (this.moguciSmjerovi.Count == 0) {
@@ -217,7 +222,7 @@ namespace PotapanjeBrodova
             return new Polje(-1, -1);
         }
 
-        private smjer OdrediSmjer(Polje prvo, Polje drugo) {
+        protected smjer OdrediSmjer(Polje prvo, Polje drugo) {
             if (prvo.Redak == drugo.Redak) {
                 if (prvo.Stupac < drugo.Stupac)
                     return smjer.desno;
@@ -230,64 +235,6 @@ namespace PotapanjeBrodova
             }
         }
 
-        private HashSet<smjer> IzracunajMoguceSmjerove(Polje prviPogodak) {
-            HashSet<smjer> rezultat = new HashSet<smjer>();
-            //pogledaj da li postoje polja lijevo, desno, gore, dole
-            // uzmi u ozbir preostale velicine brodova!
-
-            // gledaj lijevo: pomakni se do kraja segmenta, ako brod stane, dodaj smjer.
-            int r = prviPogodak.Redak;
-            int s = prviPogodak.Stupac;
-            while (this.mreza.DajSlobodnaPolja().Contains(new Polje(r, s - 1))) {
-                s--;
-            }
-            foreach (int duljina in this.flota) {
-                if (s != prviPogodak.Stupac && this.mreza.ImaDovoljnoMjestaDesno(new Polje(r, s), duljina)) {
-                    rezultat.Add(smjer.lijevo);
-                    break;
-                }
-            }
-
-            // gledaj desno: pomakni se do kraja segmenta, pokusaj se pomaknuti lijevo, dodaj smjer
-            r = prviPogodak.Redak;
-            s = prviPogodak.Stupac;
-            while (this.mreza.DajSlobodnaPolja().Contains(new Polje(r, s + 1))) {
-                s++;
-            }
-            foreach (int duljina in this.flota) {
-                if (s != prviPogodak.Stupac && this.mreza.ImaDovoljnoMjestaDesno(new Polje(r, s - duljina), duljina)) {
-                    rezultat.Add(smjer.desno);
-                    break;
-                }
-            }
-
-            // gledaj gore
-            r = prviPogodak.Redak;
-            s = prviPogodak.Stupac;
-            while (this.mreza.DajSlobodnaPolja().Contains(new Polje(r - 1, s))) {
-                r--;
-            }
-            foreach (int duljina in this.flota) {
-                if (r != prviPogodak.Redak && this.mreza.ImaDovoljnoMjestaDolje(new Polje(r, s), duljina)) {
-                    rezultat.Add(smjer.gore);
-                    break;
-                }
-            }
-
-            // gledaj dolje
-            r = prviPogodak.Redak;
-            s = prviPogodak.Stupac;
-            while (this.mreza.DajSlobodnaPolja().Contains(new Polje(r + 1, s))) {
-                r++;
-            }
-            foreach (int duljina in this.flota) {
-                if (r != prviPogodak.Redak && this.mreza.ImaDovoljnoMjestaDolje(new Polje(r - duljina, s), duljina)) {
-                    rezultat.Add(smjer.dolje);
-                    break;
-                }
-            }
-
-            return rezultat;
-        }
+        abstract protected HashSet<smjer> IzracunajMoguceSmjerove(Polje prviPogodak);
     }
 }
