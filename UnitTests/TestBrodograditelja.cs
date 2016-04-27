@@ -60,5 +60,15 @@ namespace UnitTests
             BrodograditeljTemplate b2 = BrodograditeljFactory.DajBrodograditelja();
             Assert.IsInstanceOfType(b2, typeof(BrodograditeljRazmak));
         }
+
+        [TestMethod]
+        public void Brodograditelj_SagradiBrodVracaBrodKojiJeDioMreze() {
+            BrodograditeljTemplate b = BrodograditeljFactory.DajBrodograditelja();
+            b.Mreza = new Mreza(10, 10);
+            Brod brod = b.SagradiBrod(4);
+            foreach (Polje p in brod.Polja) {
+                Assert.IsTrue(b.Mreza.polja.Contains(p));
+            }
+        }
     }
 }

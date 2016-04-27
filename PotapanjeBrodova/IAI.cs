@@ -11,6 +11,6 @@
 
         void Initialize(int redaka, int stupaca, int[] duljineBrodova);
         Polje Gadjaj();
-        void ObradiPogodak(Polje p, rezultatGadjanja rezultat);
+        void ObradiPogodak(rezultatGadjanja rezultat);
     }
 }

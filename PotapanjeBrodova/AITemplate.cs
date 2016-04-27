@@ -15,15 +15,19 @@ namespace PotapanjeBrodova
 
         public List<int> Flota {get{return flota;} set{flota = value;}}
 
+     
+
         List<int> flota = new List<int>();
         Random rand = new Random();
 
         // preko ovih varijabli pratimo u kojem rezimu rada se trenutno nalazimo
         // i sto cemo slijedece gadjati
-        public enum rezimRada { napipavanje, unistavanje };
+        public enum rezimRada { napipavanje, trazenjeSmjera, unistavanje };
         rezimRada rezim;
+        public rezimRada Rezim
+        { get {return rezim;}}
         List<Polje> trenutnaMeta = new List<Polje>();
-        Polje slijedecePolje;
+        Polje gadjanoPolje;
         public enum smjer { gore, dolje, lijevo, desno, nepoznato };
         smjer pronadjeniSmjer = smjer.nepoznato;
         HashSet<smjer> moguciSmjerovi = new HashSet<smjer>();
@@ -38,18 +42,16 @@ namespace PotapanjeBrodova
 
         public Polje Gadjaj() {
             // ako je novo polje spremno (izracunato) onda vrati novo polje
-            // inace cekaj (osim ako odustanemo od multithreadinga)
-            if (this.slijedecePolje != null) {
-                return this.slijedecePolje;
+            if (this.gadjanoPolje == null) {
+                // ako nema polja, moramo nasumicno izabrati jedno polje
+                Izvazi();
+                this.gadjanoPolje = SlijedecePoljeNapipavanje();
             }
-            else {
-                // PLACEHOLDER.
-                // Ovdje bi isao neki Thread.Sleep ali nema smisla ako smo na istom threadu!
-                throw new NotImplementedException();
-            }
+            return this.gadjanoPolje;
         }
 
-        public void ObradiPogodak(Polje p, rezultatGadjanja rezultat) {
+        public void ObradiPogodak(rezultatGadjanja rezultat) {
+            Polje p = this.gadjanoPolje;
             // NAPIPAVANJE
             if (this.rezim == rezimRada.napipavanje) {
                 switch (rezultat) {
@@ -57,14 +59,14 @@ namespace PotapanjeBrodova
                         // obicni promasaj
                         this.Mreza.EliminirajPolje(p);
                         Izvazi();
-                        this.slijedecePolje = SlijedecePoljeNapipavanje();
+                        this.gadjanoPolje = SlijedecePoljeNapipavanje();
                         break;
                     case rezultatGadjanja.pogodak:
                         // prvi pogodak
                         this.rezim = rezimRada.unistavanje;
                         this.trenutnaMeta.Add(p);
                         this.Mreza.EliminirajPolje(p);
-                        this.slijedecePolje = SlijedecePoljeUnistavanje(p, rezultat);
+                        this.gadjanoPolje = SlijedecePoljeUnistavanje(p, rezultat);
                         break;
                     case rezultatGadjanja.potopljen:
                         // ovdje dolazimo samo ako slucajno napipamo brod velicine 1
@@ -72,7 +74,7 @@ namespace PotapanjeBrodova
                         this.Flota.Remove(this.trenutnaMeta.Count);
                         EliminirajBrod(trenutnaMeta);
                         this.trenutnaMeta.Clear();
-                        this.slijedecePolje = SlijedecePoljeNapipavanje();
+                        this.gadjanoPolje = SlijedecePoljeNapipavanje();
                         break;
                 }
             }
@@ -81,12 +83,12 @@ namespace PotapanjeBrodova
                 switch (rezultat) {
                     case rezultatGadjanja.promasaj:
                         this.Mreza.EliminirajPolje(p);
-                        this.slijedecePolje = SlijedecePoljeUnistavanje(p, rezultat);
+                        this.gadjanoPolje = SlijedecePoljeUnistavanje(p, rezultat);
                         break;
                     case rezultatGadjanja.pogodak:
                         this.Mreza.EliminirajPolje(p);
                         this.trenutnaMeta.Add(p);
-                        this.slijedecePolje = SlijedecePoljeUnistavanje(p, rezultat);
+                        this.gadjanoPolje = SlijedecePoljeUnistavanje(p, rezultat);
                         break;
                     case rezultatGadjanja.potopljen:
                         // ako smo potopili brod, cistimo varijable i vracamo se na napipavanje
@@ -97,7 +99,7 @@ namespace PotapanjeBrodova
                         EliminirajBrod(this.trenutnaMeta);
                         this.trenutnaMeta.Clear();
                         this.rezim = rezimRada.napipavanje;
-                        this.slijedecePolje = SlijedecePoljeNapipavanje();
+                        this.gadjanoPolje = SlijedecePoljeNapipavanje();
                         break;
                 }
             }
