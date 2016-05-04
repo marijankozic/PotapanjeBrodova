@@ -23,11 +23,11 @@ namespace PotapanjeBrodova
                 // osim ako je brod vec potopljen
                 switch (ai.rezultatGadjanja) {
                     case rezultatGadjanja.promasaj:
-                        return new TaktikaNapipavanjeRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje,ai.moguciSmjerovi, ai.pronadjeniSmjer);
+                        return new TaktikaNapipavanjeRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje,ai.moguciSmjerovi, ai.pronadjeniSmjer, ai.Flota);
                     case rezultatGadjanja.pogodak:
-                        return new TaktikaTrazenjeSmjeraRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.pronadjeniSmjer);
+                        return new TaktikaTrazenjeSmjeraRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.pronadjeniSmjer, ai.Flota);
                     case rezultatGadjanja.potopljen:
-                        return new TaktikaNapipavanjeRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.pronadjeniSmjer);
+                        return new TaktikaNapipavanjeRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.pronadjeniSmjer, ai.Flota);
                     case rezultatGadjanja.PORAZ:
                         return null; // OVO NIJE PROBLEM JER SMO U SLUCAJU POBJEDE IONAKO ZOBISLI TRAZENJE POLJA
                 }
@@ -37,11 +37,11 @@ namespace PotapanjeBrodova
                 // osim ako je brod vec potopljen
                 switch (ai.rezultatGadjanja) {
                     case rezultatGadjanja.promasaj:
-                        return new TaktikaTrazenjeSmjeraRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.pronadjeniSmjer);
+                        return new TaktikaTrazenjeSmjeraRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.pronadjeniSmjer, ai.Flota);
                     case rezultatGadjanja.pogodak:
-                        return new TaktikaUnistavanjeRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.pronadjeniSmjer);
+                        return new TaktikaUnistavanjeRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.pronadjeniSmjer, ai.Flota);
                     case rezultatGadjanja.potopljen:
-                        return new TaktikaNapipavanjeRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.pronadjeniSmjer);
+                        return new TaktikaNapipavanjeRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.pronadjeniSmjer, ai.Flota);
                     case rezultatGadjanja.PORAZ:
                         return null;
                 }

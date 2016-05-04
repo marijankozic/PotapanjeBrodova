@@ -14,15 +14,17 @@ namespace PotapanjeBrodova
         protected HashSet<smjer> moguciSmjerovi;
         protected smjer pronadjeniSmjer;
         protected Random rand = new Random();
+        protected List<int> flota;
 
         public TaktikaTemplate(List<Polje> trenutnaMeta, Mreza mreza, rezultatGadjanja rezultat,
-            Polje gadjanoPolje, HashSet<smjer> moguciSmjerovi, smjer pronadjeniSmjer) {
+            Polje gadjanoPolje, HashSet<smjer> moguciSmjerovi, smjer pronadjeniSmjer, List<int> flota) {
             this.trenutnaMeta = trenutnaMeta;
             this.mreza = mreza;
             this.rezultat = rezultat;
             this.gadjanoPolje = gadjanoPolje;
             this.moguciSmjerovi = moguciSmjerovi;
             this.pronadjeniSmjer = pronadjeniSmjer;
+            this.flota = flota;
         }
 
         public abstract Polje SlijedecePolje();

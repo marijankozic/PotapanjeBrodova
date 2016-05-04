@@ -9,8 +9,8 @@ namespace PotapanjeBrodova
     {
         public TaktikaUnistavanjeRazmak(List<Polje> trenutnaMeta, Mreza mreza,
             rezultatGadjanja rezultat, Polje gadjanoPolje, HashSet<smjer> moguciSmjerovi,
-            smjer pronadjeniSmjer) : base(trenutnaMeta, mreza, rezultat, gadjanoPolje,
-                moguciSmjerovi, pronadjeniSmjer) {
+            smjer pronadjeniSmjer, List<int> flota) : base(trenutnaMeta, mreza, rezultat, gadjanoPolje,
+                moguciSmjerovi, pronadjeniSmjer, flota) {
         }
 
         public override Polje SlijedecePolje() {
