@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace PotapanjeBrodova
 {
+    public enum smjer { gore, dolje, lijevo, desno, nepoznato };
     public abstract class AITemplate : IAI
     
     {
@@ -26,11 +27,11 @@ namespace PotapanjeBrodova
         rezimRada rezim;
         public rezimRada Rezim
         { get {return rezim;}}
-        List<Polje> trenutnaMeta = new List<Polje>();
-        Polje gadjanoPolje;
-        public enum smjer { gore, dolje, lijevo, desno, nepoznato };
-        smjer pronadjeniSmjer = smjer.nepoznato;
-        HashSet<smjer> moguciSmjerovi = new HashSet<smjer>();
+        public List<Polje> trenutnaMeta = new List<Polje>();
+        public Polje gadjanoPolje;
+        public smjer pronadjeniSmjer = smjer.nepoznato;
+        public HashSet<smjer> moguciSmjerovi = new HashSet<smjer>();
+        public rezultatGadjanja rezultatGadjanja;
 
         public void Initialize(int redaka, int stupaca, int[] duljineBrodova) {
             this.Mreza = new Mreza(redaka, stupaca);
@@ -40,6 +41,7 @@ namespace PotapanjeBrodova
             this.rezim = rezimRada.napipavanje;
         }
 
+        // OVO TREBA REVIDIRATI NAKON UVODJENJA STATE MACHINE SUSTAVA
         public Polje Gadjaj() {
             // ako je novo polje spremno (izracunato) onda vrati novo polje
             if (this.gadjanoPolje == null) {
@@ -51,6 +53,7 @@ namespace PotapanjeBrodova
         }
 
         public void ObradiPogodak(rezultatGadjanja rezultat) {
+            this.rezultatGadjanja = rezultat;
             Polje p = this.gadjanoPolje;
             // NAPIPAVANJE
             if (this.rezim == rezimRada.napipavanje) {
