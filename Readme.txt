@@ -17,6 +17,7 @@ Scenarij:
 
  4. Igrač ponavlja korake (2) i (3) za preostala plovila koja će činiti njegovu
     flotu. Pritom se brodovi na mreži ne smiju preklapati niti u jednom polju.
+    Isto tako, brodovi se ne smiju niti dodirivati.
 
  5. Nakon što oba igrača slože svoje flote, počinje igra.
 
