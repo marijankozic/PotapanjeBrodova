@@ -27,8 +27,10 @@ namespace PotapanjeBrodova
         public Zapovijedi zap { get; set; }
         public class Zapovijedi
         {
-            public Zapovijedi() {}
-            public List<Polje> trenutnaMeta = new List<Polje>();
+            public Zapovijedi() {
+                trenutnaMeta = new List<Polje>();
+            }
+            public List<Polje> trenutnaMeta;
             public Polje gadjanoPolje;
             public smjer pronadjeniSmjer = smjer.nepoznato;
             public HashSet<smjer> moguciSmjerovi = new HashSet<smjer>();
@@ -44,8 +46,8 @@ namespace PotapanjeBrodova
             this.Flota = duljineBrodova.ToList();
             this.Flota.Sort();
             this.Flota.Reverse();
-            this.tvornica = new TaktikaFactory(this.zap, this.mreza, this.flota);
             this.zap = new Zapovijedi();
+            this.tvornica = new TaktikaFactory(this.zap, this.mreza, this.flota);
             this.zap.rezultatGadjanja = rezultatGadjanja.nepoznato;
         }
 
