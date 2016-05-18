@@ -7,21 +7,13 @@ namespace PotapanjeBrodova
 {
     public abstract class TaktikaTemplate : ITaktika
     {
-        protected List<Polje> trenutnaMeta;
-        protected Mreza mreza;
-        protected rezultatGadjanja rezultat;
-        protected Polje gadjanoPolje;
-        protected HashSet<smjer> moguciSmjerovi;
-        protected Random rand = new Random();
-        protected List<int> flota;
+        public AITemplate.Zapovijedi zap;
+        public Mreza mreza;
+        public List<int> flota;
 
-        public TaktikaTemplate(List<Polje> trenutnaMeta, Mreza mreza, rezultatGadjanja rezultat,
-            Polje gadjanoPolje, HashSet<smjer> moguciSmjerovi, List<int> flota) {
-            this.trenutnaMeta = trenutnaMeta;
+        public TaktikaTemplate(AITemplate.Zapovijedi zap, Mreza mreza, List<int> flota) {
+            this.zap = zap;
             this.mreza = mreza;
-            this.rezultat = rezultat;
-            this.gadjanoPolje = gadjanoPolje;
-            this.moguciSmjerovi = moguciSmjerovi;
             this.flota = flota;
         }
 
@@ -37,7 +29,7 @@ namespace PotapanjeBrodova
                     return new Polje(zadnjiPogodak.Redak, zadnjiPogodak.Stupac - 1);
                 case smjer.desno:
                     return new Polje(zadnjiPogodak.Redak, zadnjiPogodak.Stupac + 1);
-                default: return null;
+                default: return null; //PROBLEM
             }
         }
 
@@ -52,7 +44,7 @@ namespace PotapanjeBrodova
                 case smjer.desno:
                     return smjer.lijevo;
                 default:
-                    throw new NotSupportedException();
+                    return smjer.nepoznato;
             }
         }
 

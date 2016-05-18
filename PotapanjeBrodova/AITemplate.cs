@@ -17,19 +17,25 @@ namespace PotapanjeBrodova
         public List<int> Flota {get{return flota;} set{flota = value;}}
         
         List<int> flota = new List<int>();
-        Random rand = new Random();
+        
 
         // preko ovih varijabli pratimo u kojem rezimu rada se trenutno nalazimo
         // i sto cemo slijedece gadjati
         public TaktikaTemplate Taktika
         {get { return taktika; }}
 
-        public List<Polje> trenutnaMeta = new List<Polje>();
-        public Polje gadjanoPolje;
-        public smjer pronadjeniSmjer = smjer.nepoznato;
-        public HashSet<smjer> moguciSmjerovi = new HashSet<smjer>();
-        public rezultatGadjanja rezultatGadjanja;
-
+        public Zapovijedi zap { get; set; }
+        public class Zapovijedi
+        {
+            public Zapovijedi() {}
+            public List<Polje> trenutnaMeta = new List<Polje>();
+            public Polje gadjanoPolje;
+            public smjer pronadjeniSmjer = smjer.nepoznato;
+            public HashSet<smjer> moguciSmjerovi = new HashSet<smjer>();
+            public rezultatGadjanja rezultatGadjanja;
+            public Random rand = new Random();
+        }
+        
         TaktikaTemplate taktika;
         TaktikaFactory tvornica;
 
@@ -38,33 +44,34 @@ namespace PotapanjeBrodova
             this.Flota = duljineBrodova.ToList();
             this.Flota.Sort();
             this.Flota.Reverse();
-            this.tvornica = new TaktikaFactory(this);
-            this.rezultatGadjanja = rezultatGadjanja.nepoznato;
+            this.tvornica = new TaktikaFactory(this.zap, this.mreza, this.flota);
+            this.zap = new Zapovijedi();
+            this.zap.rezultatGadjanja = rezultatGadjanja.nepoznato;
         }
 
         public Polje Gadjaj() {
             Izvazi();
             taktika = tvornica.DajTaktiku();
-            this.gadjanoPolje = taktika.SlijedecePolje();
+            this.zap.gadjanoPolje = taktika.SlijedecePolje();
             //this.rezultatGadjanja = rezultatGadjanja.nepoznato;
-            return this.gadjanoPolje;
+            return this.zap.gadjanoPolje;
         }
 
         public void ObradiPogodak(rezultatGadjanja rezultat) {
-            this.rezultatGadjanja = rezultat;
+            this.zap.rezultatGadjanja = rezultat;
             switch (rezultat) {
                 case rezultatGadjanja.pogodak:
-                    this.trenutnaMeta.Add(this.gadjanoPolje);
+                    this.zap.trenutnaMeta.Add(this.zap.gadjanoPolje);
                     break;
                 case rezultatGadjanja.potopljen:
-                    this.trenutnaMeta.Add(this.gadjanoPolje);
-                    this.flota.Remove(this.trenutnaMeta.Count);
-                    this.trenutnaMeta.Clear();
+                    this.zap.trenutnaMeta.Add(this.zap.gadjanoPolje);
+                    this.flota.Remove(this.zap.trenutnaMeta.Count);
+                    this.zap.trenutnaMeta.Clear();
                     break;
                 default:
                     break;
             }
-            this.Mreza.EliminirajPolje(this.gadjanoPolje);
+            this.Mreza.EliminirajPolje(this.zap.gadjanoPolje);
         }
 
         public abstract void EliminirajBrod(List<Polje> brod);

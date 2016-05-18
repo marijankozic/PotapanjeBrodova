@@ -7,10 +7,8 @@ namespace PotapanjeBrodova
 {
     public class TaktikaNapipavanjeRazmak : TaktikaTemplate
     {
-        public TaktikaNapipavanjeRazmak(List<Polje> trenutnaMeta, Mreza mreza,
-            rezultatGadjanja rezultat, Polje gadjanoPolje, HashSet<smjer> moguciSmjerovi,
-             List<int> flota) : base(trenutnaMeta, mreza, rezultat, gadjanoPolje,
-                moguciSmjerovi, flota) {
+        public TaktikaNapipavanjeRazmak(AITemplate.Zapovijedi zap, Mreza mreza, List<int> flota) 
+            : base(zap, mreza, flota) {
         }
 
         public override Polje SlijedecePolje() {
@@ -18,7 +16,7 @@ namespace PotapanjeBrodova
             // pretpostavljamo da su sva polja vec izvagana
             var najtezi = this.mreza.polja.Max(x => x.Tezina);
             var najtezaGrupa = this.mreza.polja.FindAll(x => x.Tezina == najtezi);
-            return najtezaGrupa.ElementAt(rand.Next(najtezaGrupa.Count));
+            return najtezaGrupa.ElementAt(zap.rand.Next(najtezaGrupa.Count));
         }
     }
 }

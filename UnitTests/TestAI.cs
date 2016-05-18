@@ -88,5 +88,59 @@ namespace UnitTests
             Assert.IsInstanceOfType(ai.Taktika, typeof(TaktikaTrazenjeSmjeraRazmak));
         }
 
+        [TestMethod]
+        public void AI_NakonPotapanjaTaktikaJeNapipavanje() {
+            AITemplate ai = AIFactory.DajAI();
+            ai.Initialize(10, 10, new int[] { 2, 3, 3, 4 });
+            Polje p = ai.Gadjaj();
+            ai.ObradiPogodak(rezultatGadjanja.potopljen);
+            p = ai.Gadjaj();
+            Assert.IsInstanceOfType(ai.Taktika, typeof(TaktikaNapipavanjeRazmak));
+        }
+
+        [TestMethod]
+        public void AI_NakonMukotrpnogPotapanjaTaktikaJeNapipavanje() {
+            AITemplate ai = AIFactory.DajAI();
+            ai.Initialize(10, 10, new int[] { 2, 3, 3, 4 });
+            Polje p = ai.Gadjaj();
+            ai.ObradiPogodak(rezultatGadjanja.pogodak);
+            p = ai.Gadjaj();
+            ai.ObradiPogodak(rezultatGadjanja.pogodak);
+            p = ai.Gadjaj();
+            ai.ObradiPogodak(rezultatGadjanja.pogodak);
+            p = ai.Gadjaj();
+            ai.ObradiPogodak(rezultatGadjanja.potopljen);
+            p = ai.Gadjaj();
+            Assert.IsInstanceOfType(ai.Taktika, typeof(TaktikaNapipavanjeRazmak));
+        }
+
+        [TestMethod]
+        public void AI_MjesovitaSimulacijaIspravnoDajeTaktike() {
+            AITemplate ai = AIFactory.DajAI();
+            ai.Initialize(10, 10, new int[] { 2, 3, 3, 4 });
+            Polje p = ai.Gadjaj();
+            Assert.IsInstanceOfType(ai.Taktika, typeof(TaktikaNapipavanjeRazmak));
+            ai.ObradiPogodak(rezultatGadjanja.promasaj);
+            p = ai.Gadjaj();
+            Assert.IsInstanceOfType(ai.Taktika, typeof(TaktikaNapipavanjeRazmak));
+            ai.ObradiPogodak(rezultatGadjanja.pogodak);
+            p = ai.Gadjaj();
+            Assert.IsInstanceOfType(ai.Taktika, typeof(TaktikaTrazenjeSmjeraRazmak));
+            ai.ObradiPogodak(rezultatGadjanja.promasaj);
+            p = ai.Gadjaj();
+            Assert.IsInstanceOfType(ai.Taktika, typeof(TaktikaTrazenjeSmjeraRazmak));
+            ai.ObradiPogodak(rezultatGadjanja.pogodak);
+            p = ai.Gadjaj();
+            Assert.IsInstanceOfType(ai.Taktika, typeof(TaktikaUnistavanjeRazmak));
+            ai.ObradiPogodak(rezultatGadjanja.promasaj);
+            p = ai.Gadjaj();
+            Assert.IsInstanceOfType(ai.Taktika, typeof(TaktikaTrazenjeSmjeraRazmak));
+            ai.ObradiPogodak(rezultatGadjanja.pogodak);
+            p = ai.Gadjaj();
+            Assert.IsInstanceOfType(ai.Taktika, typeof(TaktikaUnistavanjeRazmak));
+            ai.ObradiPogodak(rezultatGadjanja.potopljen);
+            p = ai.Gadjaj();
+            Assert.IsInstanceOfType(ai.Taktika, typeof(TaktikaNapipavanjeRazmak));
+        }
     }
 }

@@ -7,14 +7,8 @@ namespace PotapanjeBrodova
 {
     public class TaktikaTrazenjeSmjeraRazmak : TaktikaTemplate
     {
-        smjer pronadjeni;
-
-        public TaktikaTrazenjeSmjeraRazmak(List<Polje> trenutnaMeta, Mreza mreza, 
-            rezultatGadjanja rezultat, Polje gadjanoPolje, HashSet<smjer> moguciSmjerovi,
-            ref smjer pronadjeniSmjer, List<int> flota) : base(trenutnaMeta, mreza, rezultat, gadjanoPolje,
-                moguciSmjerovi, flota) {
-            if (rezultat == rezultatGadjanja.promasaj) pronadjeniSmjer = SuprotniSmjer(pronadjeniSmjer);
-            this.pronadjeni = pronadjeniSmjer;
+        public TaktikaTrazenjeSmjeraRazmak(AITemplate.Zapovijedi zap, Mreza mreza, List<int> flota)
+            : base(zap, mreza, flota) {
         }
 
         protected HashSet<smjer> IzracunajMoguceSmjerove(Polje prviPogodak) {
@@ -83,21 +77,29 @@ namespace PotapanjeBrodova
             // A) prvi pogodak broda (smjer jos nije odabran)
             // B) promasaj nakon sto smo ranije pogodili - treba mijenjati smjer
 
-            Polje prviPogodak = this.trenutnaMeta.First();
-            Polje zadnjiPogodak = this.trenutnaMeta.Last();
+            Polje prviPogodak = zap.trenutnaMeta.First();
+            Polje zadnjiPogodak = zap.trenutnaMeta.Last();
             smjer noviSmjer = smjer.nepoznato;
 
-            if (this.rezultat == rezultatGadjanja.pogodak) {
+            if (zap.rezultatGadjanja == rezultatGadjanja.pogodak) {
                 // A - izaberi nasumice smjer i gadjaj
-                if(moguciSmjerovi.Count==0) moguciSmjerovi = IzracunajMoguceSmjerove(prviPogodak);
-                noviSmjer = moguciSmjerovi.ElementAt(rand.Next(moguciSmjerovi.Count));
-                moguciSmjerovi.Remove(noviSmjer);
+                if(zap.moguciSmjerovi.Count==0) zap.moguciSmjerovi = IzracunajMoguceSmjerove(prviPogodak);
+                noviSmjer = zap.moguciSmjerovi.ElementAt(zap.rand.Next(zap.moguciSmjerovi.Count));
+                zap.moguciSmjerovi.Remove(noviSmjer);
                 return PoljeZaSmjer(noviSmjer, zadnjiPogodak);
             }
             else {
                 // B - ako postoji, izaberi suprotni smjer i gadjaj od prvog! pogotka
                 //     brodovi se ne dodiruju -> nije moguce slucajno pogoditi drugi brod i izazvati zabunu smjera
-                return PoljeZaSmjer(pronadjeni, prviPogodak);
+                zap.pronadjeniSmjer = SuprotniSmjer(zap.pronadjeniSmjer);
+                if (zap.pronadjeniSmjer == smjer.nepoznato) {
+                    noviSmjer = zap.moguciSmjerovi.ElementAt(zap.rand.Next(zap.moguciSmjerovi.Count));
+                    zap.moguciSmjerovi.Remove(noviSmjer);
+                    return PoljeZaSmjer(noviSmjer, zadnjiPogodak);
+                }
+                else {
+                    return PoljeZaSmjer(zap.pronadjeniSmjer, prviPogodak);
+                }
             }
 
         }
