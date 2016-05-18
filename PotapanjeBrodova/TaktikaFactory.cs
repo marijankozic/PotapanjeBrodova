@@ -23,7 +23,7 @@ namespace PotapanjeBrodova
                 // osim ako je brod vec potopljen
                 switch (ai.rezultatGadjanja) {
                     case rezultatGadjanja.promasaj:
-                        return new TaktikaNapipavanjeRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje,ai.moguciSmjerovi, ai.pronadjeniSmjer, ai.Flota);
+                        return new TaktikaNapipavanjeRazmak( ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje,ai.moguciSmjerovi, ai.pronadjeniSmjer, ai.Flota);
                     case rezultatGadjanja.pogodak:
                         return new TaktikaTrazenjeSmjeraRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.pronadjeniSmjer, ai.Flota);
                     case rezultatGadjanja.potopljen:

@@ -14,7 +14,10 @@ namespace PotapanjeBrodova
         }
 
         public override Polje SlijedecePolje() {
-            throw new NotImplementedException();
+            // Stanja koja vode u ovaj objekt su:
+            // A) drugi (i svaki slijedeci) pogodak broda (dakle, imamo smjer)
+            Polje zadnjiPogodak = this.trenutnaMeta.Last();
+            return PoljeZaSmjer(pronadjeniSmjer, zadnjiPogodak);
         }
     }
 }

@@ -15,9 +15,7 @@ namespace PotapanjeBrodova
         {get { return mreza; } set {mreza = value; }}
 
         public List<int> Flota {get{return flota;} set{flota = value;}}
-
-     
-
+        
         List<int> flota = new List<int>();
         Random rand = new Random();
 
@@ -33,25 +31,27 @@ namespace PotapanjeBrodova
         public HashSet<smjer> moguciSmjerovi = new HashSet<smjer>();
         public rezultatGadjanja rezultatGadjanja;
 
+        TaktikaTemplate taktika;
+        TaktikaFactory tvornica;
+
         public void Initialize(int redaka, int stupaca, int[] duljineBrodova) {
             this.Mreza = new Mreza(redaka, stupaca);
             this.Flota = duljineBrodova.ToList();
             this.Flota.Sort();
             this.Flota.Reverse();
             this.rezim = rezimRada.napipavanje;
+            this.tvornica = new TaktikaFactory(this);
         }
 
-        // OVO TREBA REVIDIRATI NAKON UVODJENJA STATE MACHINE SUSTAVA
         public Polje Gadjaj() {
-            // ako je novo polje spremno (izracunato) onda vrati novo polje
-            if (this.gadjanoPolje == null) {
-                // ako nema polja, moramo nasumicno izabrati jedno polje
-                Izvazi();
-                this.gadjanoPolje = SlijedecePoljeNapipavanje();
-            }
+            Izvazi();
+            taktika = tvornica.DajTaktiku();
+            this.gadjanoPolje = taktika.SlijedecePolje();
             return this.gadjanoPolje;
         }
 
+        // OVDJE TREBA IZBACITI SVE KEREFEKE I OSTAVITI SAMO NUZNU OBRADU GADJANJA
+        // upisivanje vrijednosti u potrebne varijable i uklanjanje iz mreze
         public void ObradiPogodak(rezultatGadjanja rezultat) {
             this.rezultatGadjanja = rezultat;
             Polje p = this.gadjanoPolje;
@@ -240,6 +240,6 @@ namespace PotapanjeBrodova
             }
         }
 
-        abstract protected HashSet<smjer> IzracunajMoguceSmjerove(Polje prviPogodak);
+
     }
 }

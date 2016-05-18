@@ -81,48 +81,22 @@ namespace PotapanjeBrodova
 
             Polje prviPogodak = this.trenutnaMeta.First();
             Polje zadnjiPogodak = this.trenutnaMeta.Last();
+            smjer noviSmjer = smjer.nepoznato;
 
-            // A
             if (this.rezultat == rezultatGadjanja.pogodak) {
-                moguciSmjerovi = IzracunajMoguceSmjerove(prviPogodak);
-                smjer noviSmjer = moguciSmjerovi.ElementAt(rand.Next(moguciSmjerovi.Count));
+                // A - izaberi nasumice smjer i gadjaj
+                if(moguciSmjerovi.Count==0) moguciSmjerovi = IzracunajMoguceSmjerove(prviPogodak);
+                noviSmjer = moguciSmjerovi.ElementAt(rand.Next(moguciSmjerovi.Count));
                 moguciSmjerovi.Remove(noviSmjer);
-                switch (noviSmjer) {
-                    case smjer.gore:
-                        return new Polje(zadnjiPogodak.Redak - 1, zadnjiPogodak.Stupac);
-                    case smjer.dolje:
-                        return new Polje(zadnjiPogodak.Redak + 1, zadnjiPogodak.Stupac);
-                    case smjer.lijevo:
-                        return new Polje(zadnjiPogodak.Redak, zadnjiPogodak.Stupac - 1);
-                    case smjer.desno:
-                        return new Polje(zadnjiPogodak.Redak, zadnjiPogodak.Stupac + 1);
-                }
+                return PoljeZaSmjer(noviSmjer, zadnjiPogodak);
             }
-
-            // B   OVO TREBA REVIDIRATI!!! STO AKO SMO PONOVO FULALI. TREBA MIJENJATI JOS NEKI SMJER A NE SAMO SUPROTNU
             else {
-                switch (this.pronadjeniSmjer) {
-                    case smjer.gore:
-                        this.pronadjeniSmjer = smjer.dolje;
-                        return new Polje(zadnjiPogodak.Redak + 1, zadnjiPogodak.Stupac);
-                    case smjer.dolje:
-                        this.pronadjeniSmjer = smjer.gore;
-                        return new Polje(zadnjiPogodak.Redak - 1, zadnjiPogodak.Stupac);
-                    case smjer.lijevo:
-                        this.pronadjeniSmjer = smjer.desno;
-                        return new Polje(zadnjiPogodak.Redak, zadnjiPogodak.Stupac + 1);
-                    case smjer.desno:
-                        this.pronadjeniSmjer = smjer.lijevo;
-                        return new Polje(zadnjiPogodak.Redak, zadnjiPogodak.Stupac - 1);
-                }
+                // B - ako postoji, izaberi suprotni smjer i gadjaj od prvog! pogotka
+                //     brodovi se ne dodiruju -> nije moguce slucajno pogoditi drugi brod i izazvati zabunu smjera
+                pronadjeniSmjer = SuprotniSmjer(pronadjeniSmjer);
+                return PoljeZaSmjer(pronadjeniSmjer, prviPogodak);
             }
-           
 
-            
-
-
-
-            throw new NotImplementedException();
         }
     }
 }

@@ -13,8 +13,6 @@ namespace PotapanjeBrodova
             throw new NotImplementedException();
         }
 
-        protected override HashSet<smjer> IzracunajMoguceSmjerove(Polje prviPogodak) {
-            throw new NotImplementedException();
-        }
+       
     }
 }
