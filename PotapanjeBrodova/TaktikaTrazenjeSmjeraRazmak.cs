@@ -5,12 +5,16 @@ using System.Text;
 
 namespace PotapanjeBrodova
 {
-    class TaktikaTrazenjeSmjeraRazmak : TaktikaTemplate
+    public class TaktikaTrazenjeSmjeraRazmak : TaktikaTemplate
     {
+        smjer pronadjeni;
+
         public TaktikaTrazenjeSmjeraRazmak(List<Polje> trenutnaMeta, Mreza mreza, 
             rezultatGadjanja rezultat, Polje gadjanoPolje, HashSet<smjer> moguciSmjerovi,
-            smjer pronadjeniSmjer, List<int> flota) : base(trenutnaMeta, mreza, rezultat, gadjanoPolje,
-                moguciSmjerovi, pronadjeniSmjer, flota) {
+            ref smjer pronadjeniSmjer, List<int> flota) : base(trenutnaMeta, mreza, rezultat, gadjanoPolje,
+                moguciSmjerovi, flota) {
+            if (rezultat == rezultatGadjanja.promasaj) pronadjeniSmjer = SuprotniSmjer(pronadjeniSmjer);
+            this.pronadjeni = pronadjeniSmjer;
         }
 
         protected HashSet<smjer> IzracunajMoguceSmjerove(Polje prviPogodak) {
@@ -93,8 +97,7 @@ namespace PotapanjeBrodova
             else {
                 // B - ako postoji, izaberi suprotni smjer i gadjaj od prvog! pogotka
                 //     brodovi se ne dodiruju -> nije moguce slucajno pogoditi drugi brod i izazvati zabunu smjera
-                pronadjeniSmjer = SuprotniSmjer(pronadjeniSmjer);
-                return PoljeZaSmjer(pronadjeniSmjer, prviPogodak);
+                return PoljeZaSmjer(pronadjeni, prviPogodak);
             }
 
         }

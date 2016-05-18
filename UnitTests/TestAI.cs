@@ -39,24 +39,54 @@ namespace UnitTests
             Assert.IsTrue(ai.Flota.Contains(2));
             Assert.IsTrue(ai.Flota.FindAll(x => x == 3).Count == 2);
             Assert.IsTrue(ai.Flota.Contains(4));
-            Assert.IsTrue(ai.Rezim == AITemplate.rezimRada.napipavanje);
         }
 
         [TestMethod]
-        public void AI_NakonPrvogPogotkaRezimRadaJeTrazenjeSmjera() {
-            
-            // TO DO: promijeniti testove ALI i cijelu logiku tako da
-            // podrzava state machine
-     
+        public void AI_NakonPrvogPogotkaTaktikaJeTrazenjeSmjera() {
             AITemplate ai = AIFactory.DajAI();
             ai.Initialize(10, 10, new int[] { 2, 3, 3, 4 });
-            ai.Gadjaj();
+            Polje p = ai.Gadjaj();
             ai.ObradiPogodak(rezultatGadjanja.pogodak);
-            ai.Gadjaj();
-            ai.ObradiPogodak(rezultatGadjanja.pogodak);
-            Assert.IsTrue(ai.Rezim == AITemplate.rezimRada.unistavanje);
+            p = ai.Gadjaj();
+            Assert.IsInstanceOfType(ai.Taktika, typeof(TaktikaTrazenjeSmjeraRazmak));
         }
 
+        [TestMethod]
+        public void AI_NakonDvaPogotkaTaktikaJeUnistavanje() {
+            AITemplate ai = AIFactory.DajAI();
+            ai.Initialize(10, 10, new int[] { 2, 3, 3, 4 });
+            Polje p = ai.Gadjaj();
+            ai.ObradiPogodak(rezultatGadjanja.pogodak);
+            p = ai.Gadjaj();
+            ai.ObradiPogodak(rezultatGadjanja.pogodak);
+            p = ai.Gadjaj();
+            Assert.IsInstanceOfType(ai.Taktika, typeof(TaktikaUnistavanjeRazmak));
+        }
+
+        [TestMethod]
+        public void AI_NakonPogotkaIPromasajaTaktikaJeTrazenjeSmjera() {
+            AITemplate ai = AIFactory.DajAI();
+            ai.Initialize(10, 10, new int[] { 2, 3, 3, 4 });
+            Polje p = ai.Gadjaj();
+            ai.ObradiPogodak(rezultatGadjanja.pogodak);
+            p = ai.Gadjaj();
+            ai.ObradiPogodak(rezultatGadjanja.promasaj);
+            Assert.IsInstanceOfType(ai.Taktika, typeof(TaktikaTrazenjeSmjeraRazmak));
+        }
+
+        [TestMethod]
+        public void AI_NakonDvaPogotkaIPromasajaTaktikaJeTrazenjeSmjera() {
+            AITemplate ai = AIFactory.DajAI();
+            ai.Initialize(10, 10, new int[] { 2, 3, 3, 4 });
+            Polje p = ai.Gadjaj();
+            ai.ObradiPogodak(rezultatGadjanja.pogodak);
+            p = ai.Gadjaj();
+            ai.ObradiPogodak(rezultatGadjanja.pogodak);
+            p = ai.Gadjaj();
+            ai.ObradiPogodak(rezultatGadjanja.promasaj);
+            p = ai.Gadjaj();
+            Assert.IsInstanceOfType(ai.Taktika, typeof(TaktikaTrazenjeSmjeraRazmak));
+        }
 
     }
 }

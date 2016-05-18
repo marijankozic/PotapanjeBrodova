@@ -18,18 +18,20 @@ namespace PotapanjeBrodova
         }
 
         public TaktikaTemplate DajTaktiku() {
-            if (ai.trenutnaMeta.Count == 0) {
+            if (ai.trenutnaMeta.Count <= 1 ) {
                 // jos nemamo trenutnu metu - ili napipavamo dalje ili tek prelazimo u fazu trazenja smjera
                 // osim ako je brod vec potopljen
                 switch (ai.rezultatGadjanja) {
                     case rezultatGadjanja.promasaj:
-                        return new TaktikaNapipavanjeRazmak( ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje,ai.moguciSmjerovi, ai.pronadjeniSmjer, ai.Flota);
+                        return new TaktikaNapipavanjeRazmak( ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje,ai.moguciSmjerovi, ai.Flota);
                     case rezultatGadjanja.pogodak:
-                        return new TaktikaTrazenjeSmjeraRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.pronadjeniSmjer, ai.Flota);
+                        return new TaktikaTrazenjeSmjeraRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ref ai.pronadjeniSmjer, ai.Flota);
                     case rezultatGadjanja.potopljen:
-                        return new TaktikaNapipavanjeRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.pronadjeniSmjer, ai.Flota);
+                        return new TaktikaNapipavanjeRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.Flota);
                     case rezultatGadjanja.PORAZ:
                         return null; // OVO NIJE PROBLEM JER SMO U SLUCAJU POBJEDE IONAKO ZOBISLI TRAZENJE POLJA
+                    case rezultatGadjanja.nepoznato:
+                        return new TaktikaNapipavanjeRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.Flota);
                 }
             }
             else {
@@ -37,11 +39,11 @@ namespace PotapanjeBrodova
                 // osim ako je brod vec potopljen
                 switch (ai.rezultatGadjanja) {
                     case rezultatGadjanja.promasaj:
-                        return new TaktikaTrazenjeSmjeraRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.pronadjeniSmjer, ai.Flota);
+                        return new TaktikaTrazenjeSmjeraRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ref ai.pronadjeniSmjer, ai.Flota);
                     case rezultatGadjanja.pogodak:
-                        return new TaktikaUnistavanjeRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.pronadjeniSmjer, ai.Flota);
+                        return new TaktikaUnistavanjeRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ref ai.pronadjeniSmjer, ai.Flota);
                     case rezultatGadjanja.potopljen:
-                        return new TaktikaNapipavanjeRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.pronadjeniSmjer, ai.Flota);
+                        return new TaktikaNapipavanjeRazmak(ai.trenutnaMeta, ai.Mreza, ai.rezultatGadjanja, ai.gadjanoPolje, ai.moguciSmjerovi, ai.Flota);
                     case rezultatGadjanja.PORAZ:
                         return null;
                 }

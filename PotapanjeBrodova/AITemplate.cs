@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace PotapanjeBrodova
 {
     public enum smjer { gore, dolje, lijevo, desno, nepoznato };
+
     public abstract class AITemplate : IAI
-    
     {
         Mreza mreza;
         public Mreza Mreza
@@ -21,10 +21,9 @@ namespace PotapanjeBrodova
 
         // preko ovih varijabli pratimo u kojem rezimu rada se trenutno nalazimo
         // i sto cemo slijedece gadjati
-        public enum rezimRada { napipavanje, trazenjeSmjera, unistavanje };
-        rezimRada rezim;
-        public rezimRada Rezim
-        { get {return rezim;}}
+        public TaktikaTemplate Taktika
+        {get { return taktika; }}
+
         public List<Polje> trenutnaMeta = new List<Polje>();
         public Polje gadjanoPolje;
         public smjer pronadjeniSmjer = smjer.nepoznato;
@@ -39,14 +38,15 @@ namespace PotapanjeBrodova
             this.Flota = duljineBrodova.ToList();
             this.Flota.Sort();
             this.Flota.Reverse();
-            this.rezim = rezimRada.napipavanje;
             this.tvornica = new TaktikaFactory(this);
+            this.rezultatGadjanja = rezultatGadjanja.nepoznato;
         }
 
         public Polje Gadjaj() {
             Izvazi();
             taktika = tvornica.DajTaktiku();
             this.gadjanoPolje = taktika.SlijedecePolje();
+            //this.rezultatGadjanja = rezultatGadjanja.nepoznato;
             return this.gadjanoPolje;
         }
 
@@ -101,19 +101,6 @@ namespace PotapanjeBrodova
             }
         }
 
-        protected smjer OdrediSmjer(Polje prvo, Polje drugo) {
-            if (prvo.Redak == drugo.Redak) {
-                if (prvo.Stupac < drugo.Stupac)
-                    return smjer.desno;
-                else return smjer.lijevo;
-            }
-            else {
-                if (prvo.Redak < drugo.Redak)
-                    return smjer.dolje;
-                else return smjer.gore;
-            }
-        }
-
-
+        
     }
 }

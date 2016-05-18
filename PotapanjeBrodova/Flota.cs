@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PotapanjeBrodova
 {
-    public enum rezultatGadjanja { promasaj, pogodak, potopljen, PORAZ };
+    public enum rezultatGadjanja { promasaj, pogodak, potopljen, PORAZ, nepoznato };
 
     public class Flota
     /*
