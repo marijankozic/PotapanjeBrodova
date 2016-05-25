@@ -16,7 +16,6 @@ namespace UnitTests
             Assert.IsTrue(graditelj.Mreza.DajHorizontalnaSlobodnaPolja(4).Count() == 2);
         }
 
-
         [TestMethod]
         public void Brodograditelj_DajVertikalnaPocetnaPoljaZaBrodDuljine4Vraca2Polja() {
             BrodograditeljTemplate b = BrodograditeljFactory.DajBrodograditelja();
@@ -42,11 +41,39 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void BrodograditeljRazmak_PostaviBrodNaMrezuIspravnoEliminiraPolja() {
+            BrodograditeljTemplate uljanik = BrodograditeljFactory.DajBrodograditelja();
+            uljanik.Mreza = new Mreza(10, 10);
+            Brod b = uljanik.SagradiBrod(4);
+            uljanik.PostaviBrodNaMrezu(b);
+            List<Polje> prosireniBrod = new List<Polje>();
+            foreach (Polje p in b.Polja) {
+                prosireniBrod.Add(p);
+                prosireniBrod.Add(new Polje(p.Redak, p.Stupac + 1));
+                prosireniBrod.Add(new Polje(p.Redak, p.Stupac - 1));
+                prosireniBrod.Add(new Polje(p.Redak + 1, p.Stupac));
+                prosireniBrod.Add(new Polje(p.Redak - 1, p.Stupac));
+            }
+            Assert.IsFalse(prosireniBrod.Intersect(uljanik.Mreza.DajSlobodnaPolja()).Any());
+        }
+
+        [TestMethod]
         public void Brodograditelj_SloziFlotuVracaFlotuKojaSadrziSveBrodove() {
             BrodograditeljTemplate uljanik = BrodograditeljFactory.DajBrodograditelja();
             int[] duljineBrodova = new int[] {3,1,2,4};
             Flota f = uljanik.SloziFlotu(10, 10, duljineBrodova);
             Assert.IsTrue(f.Brodovi.Count == duljineBrodova.Count());
+        }
+
+        [TestMethod]
+        public void Brodograditelj_SloziFlotuVracaFlotuKojaSadrziBasOneBrodoveKojeZelimo() {
+            BrodograditeljTemplate uljanik = BrodograditeljFactory.DajBrodograditelja();
+            int[] duljineBrodova = new int[] { 3, 3, 3, 1, 2, 2, 4, 4, 4, 4 };
+            Flota f = uljanik.SloziFlotu(10, 10, duljineBrodova);
+            Assert.AreEqual(1, f.Brodovi.Count(brod => brod.Polja.Count == 1));
+            Assert.AreEqual(2, f.Brodovi.Count(brod => brod.Polja.Count == 2));
+            Assert.AreEqual(3, f.Brodovi.Count(brod => brod.Polja.Count == 3));
+            Assert.AreEqual(4, f.Brodovi.Count(brod => brod.Polja.Count == 4));
         }
 
         [TestMethod]

@@ -62,7 +62,7 @@ namespace PotapanjeBrodova
             return rezultat;
         }
 
-        internal bool ImaDovoljnoMjestaDesno(Polje p, int duljina) {
+        public bool ImaDovoljnoMjestaDesno(Polje p, int duljina) {
             Boolean rezultat = true;
             for (int i = p.Stupac; i < p.Stupac + duljina; i++) {
                 if (!polja.Contains<Polje>(new Polje(p.Redak, i))) {

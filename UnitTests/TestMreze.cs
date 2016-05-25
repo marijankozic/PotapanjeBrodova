@@ -59,5 +59,15 @@ namespace UnitTests
             Assert.IsFalse(m.ImaDovoljnoMjestaDolje(x, 1));
         }
 
+        [TestMethod]
+        public void Mreza_ImaDovoljnoMjestaDesnoDobroRadiSNegativniVrijednostima() {
+            Mreza m = new Mreza(5, 5);
+            Polje p = new Polje(3, 3);
+            Polje x = new Polje(0, -1);
+            Assert.IsTrue(m.ImaDovoljnoMjestaDesno(p, 2));
+            Assert.IsFalse(m.ImaDovoljnoMjestaDesno(p, 3));
+            Assert.IsFalse(m.ImaDovoljnoMjestaDesno(x, 1));
+        }
+
     }
 }
