@@ -330,5 +330,18 @@ namespace UnitTests
             Assert.IsTrue((prvoPolje.Redak == cetvrtoPolje.Redak && Math.Abs(prvoPolje.Stupac - cetvrtoPolje.Stupac) == 1)
                 || (prvoPolje.Stupac == cetvrtoPolje.Stupac && Math.Abs(prvoPolje.Redak - cetvrtoPolje.Redak) == 1));
         }
+
+        [TestMethod]
+        public void TaktikaTrazenjeSmjeraRazmak_IspravnoVracaSmjer() {
+            AITemplate.Zapovijedi zap = new AITemplate.Zapovijedi();
+            zap.trenutnaMeta = new List<Polje>();
+            zap.trenutnaMeta.Add(new Polje(5, 9));
+            List<int> f = new List<int>() { 3, 3, 4 };
+            Mreza m = new Mreza(10, 10);
+            TaktikaTrazenjeSmjeraRazmak t = new TaktikaTrazenjeSmjeraRazmak(zap, m, f);
+            HashSet<smjer> rezultat = new HashSet<smjer>();
+            rezultat = t.IzracunajMoguceSmjerove(zap.trenutnaMeta.First());
+            Assert.IsTrue(rezultat.Count == 3);
+        }
     }
 }

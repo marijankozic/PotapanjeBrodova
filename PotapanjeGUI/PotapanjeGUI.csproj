@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FlotaNeprijatelj.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FlotaNeprijatelj.Designer.cs">
+      <DependentUpon>FlotaNeprijatelj.cs</DependentUpon>
+    </Compile>
     <Compile Include="Flota.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -60,6 +66,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FlotaNeprijatelj.resx">
+      <DependentUpon>FlotaNeprijatelj.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Flota.resx">
       <DependentUpon>Flota.cs</DependentUpon>
     </EmbeddedResource>
@@ -89,6 +98,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OOMPotapanje\OOMPotapanje.csproj">
+      <Project>{4b764f12-074f-483e-a7a6-fb52f3c80a5e}</Project>
+      <Name>OOMPotapanje</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PotapanjeBrodova\PotapanjeBrodova.csproj">
       <Project>{18321674-c091-4bc8-817d-475418bc4b8e}</Project>
       <Name>PotapanjeBrodova</Name>

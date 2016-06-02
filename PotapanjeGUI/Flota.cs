@@ -50,8 +50,8 @@ namespace PotapanjeGUI
             Pen pen = new Pen(SystemColors.ActiveBorder);
             int redak = polje.Redak;
             int stupac = polje.Stupac;
-            int x = redak * (sirina / redaka);
-            int y = stupac * (sirina / stupaca);
+            int y = redak * (sirina / redaka);
+            int x = stupac * (sirina / stupaca);
             e.Graphics.FillRectangle(boja, x, y, (sirina / redaka), (sirina / stupaca));
             e.Graphics.DrawRectangle(pen, x, y, (sirina / redaka), (sirina / stupaca));
         }

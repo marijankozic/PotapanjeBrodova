@@ -46,6 +46,7 @@
             this.radioPCPC = new System.Windows.Forms.RadioButton();
             this.tbDnevnik = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.bgWorker = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.numRedaka)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numStupaca)).BeginInit();
             this.groupPostavke.SuspendLayout();
@@ -311,6 +312,7 @@
             this.tbDnevnik.Location = new System.Drawing.Point(416, 28);
             this.tbDnevnik.Multiline = true;
             this.tbDnevnik.Name = "tbDnevnik";
+            this.tbDnevnik.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tbDnevnik.Size = new System.Drawing.Size(200, 123);
             this.tbDnevnik.TabIndex = 8;
             // 
@@ -322,6 +324,10 @@
             this.label4.Size = new System.Drawing.Size(102, 13);
             this.label4.TabIndex = 9;
             this.label4.Text = "Kapetanov Dnevnik";
+            // 
+            // bgWorker
+            // 
+            this.bgWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgWorker_DoWork);
             // 
             // MainForm
             // 
@@ -369,6 +375,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown numBrod4;
         private System.Windows.Forms.Label label7;
+        private System.ComponentModel.BackgroundWorker bgWorker;
     }
 }
 

@@ -11,7 +11,12 @@ namespace PotapanjeBrodova
             : base(zap, mreza, flota) {
         }
 
-        protected HashSet<smjer> IzracunajMoguceSmjerove(Polje prviPogodak) {
+        public HashSet<smjer> IzracunajMoguceSmjerove(Polje prviPogodak) {
+
+            // na tezak nacin smo shvatili da provjera slobodnog mjesta radi gresku jer 
+            // u redku tj. stupcu nedostaje PRVI POGODAK --> stvara se rupa koja radi gresku
+            // zato privremeno dodajemo to polje nazad, a na kraju ga micemo
+            this.mreza.polja.Add(prviPogodak);
 
             HashSet<smjer> rezultat = new HashSet<smjer>();
             //pogledaj da li postoje polja lijevo, desno, gore, dole
@@ -69,6 +74,8 @@ namespace PotapanjeBrodova
                 }
             }
 
+            // ukloni privremeno dodano polje
+            this.mreza.polja.Remove(prviPogodak);
             return rezultat;
         }
 
